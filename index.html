@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lighthouse Speed Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Lighthouse Speed Test</h1>
+        <p class="subtitle">Enter a domain to run a performance test powered by Google PageSpeed Insights</p>
+        
+        <div class="input-section">
+            <input type="text" id="domainInput" placeholder="Enter domain (e.g., example.com)" />
+            <button id="testButton" onclick="runSpeedTest()">Run Test</button>
+        </div>
+        
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Running performance test...</p>
+        </div>
+        
+        <div id="error" class="error hidden"></div>
+        
+        <div id="results" class="results hidden">
+            <h2>Performance Results</h2>
+            
+            <div class="scores-grid">
+                <div class="score-card">
+                    <h3>Performance</h3>
+                    <div class="score" id="performanceScore">-</div>
+                </div>
+                <div class="score-card">
+                    <h3>Accessibility</h3>
+                    <div class="score" id="accessibilityScore">-</div>
+                </div>
+                <div class="score-card">
+                    <h3>Best Practices</h3>
+                    <div class="score" id="bestPracticesScore">-</div>
+                </div>
+                <div class="score-card">
+                    <h3>SEO</h3>
+                    <div class="score" id="seoScore">-</div>
+                </div>
+            </div>
+            
+            <div class="metrics">
+                <h3>Core Web Vitals</h3>
+                <div class="metric">
+                    <span class="metric-label">First Contentful Paint:</span>
+                    <span class="metric-value" id="fcp">-</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Largest Contentful Paint:</span>
+                    <span class="metric-value" id="lcp">-</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Total Blocking Time:</span>
+                    <span class="metric-value" id="tbt">-</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Cumulative Layout Shift:</span>
+                    <span class="metric-value" id="cls">-</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Speed Index:</span>
+                    <span class="metric-value" id="speedIndex">-</span>
+                </div>
+            </div>
+            
+            <div class="device-toggle">
+                <button class="device-btn active" onclick="switchDevice('mobile')">Mobile</button>
+                <button class="device-btn" onclick="switchDevice('desktop')">Desktop</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
