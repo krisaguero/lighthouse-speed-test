@@ -3,100 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lighthouse Speed Test</title>
+    <title>Website Performance Analyzer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>🚀 Lighthouse Speed Test</h1>
-        <p class="subtitle">Enter a domain to run a performance test powered by Google PageSpeed Insights</p>
+        <h1>🚀 Website Performance Analyzer</h1>
+        <p class="subtitle">Let's analyze your client's website performance</p>
         
-        <div class="form-section">
-            <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName" placeholder="Enter client's first name" />
+        <!-- Progress Indicator -->
+        <div class="progress-bar">
+            <div class="progress-step active" id="step1-indicator">
+                <span class="step-number">1</span>
+                <span class="step-label">Project Info</span>
             </div>
-            
-            <div class="form-group">
-                <label for="clientLink">Client Website Link</label>
-                <input type="url" id="clientLink" placeholder="Paste the full URL here (e.g., https://example.com)" />
+            <div class="progress-step" id="step2-indicator">
+                <span class="step-number">2</span>
+                <span class="step-label">Client Needs</span>
             </div>
-            
-            <div class="input-section">
-                <input type="text" id="domainInput" placeholder="Domain to test (e.g., example.com)" />
-                <button id="testButton" onclick="runSpeedTest()">Run Test</button>
+            <div class="progress-step" id="step3-indicator">
+                <span class="step-number">3</span>
+                <span class="step-label">Analysis</span>
+            </div>
+            <div class="progress-step" id="step4-indicator">
+                <span class="step-number">4</span>
+                <span class="step-label">Results</span>
             </div>
         </div>
-        
-        <div id="loading" class="loading hidden">
-            <div class="spinner"></div>
-            <p>Running performance test...</p>
+
+        <!-- Step 1: Project Information -->
+        <div class="step-container" id="step1">
+            <h2>Step 1: Tell me about the project</h2>
+            <p class="step-description">Let's start with some basic information about your client.</p>
+            
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="firstName">Client's First Name</label>
+                    <input type="text" id="firstName" placeholder="Enter client's first name" />
+                </div>
+                
+                <div class="form-group">
+                    <label for="domain">Website Domain</label>
+                    <input type="text" id="domain" placeholder="example.com or https://example.com" />
+                    <small>Enter the website you want to analyze</small>
+                </div>
+                
+                <button class="next-btn" onclick="goToStep2()">Next Step →</button>
+            </div>
         </div>
-        
+
+        <!-- Step 2: Client Needs -->
+        <div class="step-container hidden" id="step2">
+            <h2>Step 2: What does the client need?</h2>
+            <p class="step-description">Select the services the client might be interested in (you can select multiple).</p>
+            
+            <div class="needs-grid">
+                <label class="need-option">
+                    <input type="checkbox" name="needs" value="Website Security">
+                    <div class="need-card">
+                        <span class="need-icon">🔒</span>
+                        <span class="need-label">Website Security</span>
+                    </div>
+                </label>
+                
+                <label class="need-option">
+                    <input type="checkbox" name="needs" value="Website Design">
+                    <div class="need-card">
+                        <span class="need-icon">🎨</span>
+                        <span class="need-label">Website Design</span>
+                    </div>
+                </label>
+                
+                <label class="need-option">
+                    <input type="checkbox" name="needs" value="Support for existing website">
+                    <div class="need-card">
+                        <span class="need-icon">🛠️</span>
+                        <span class="need-label">Website Support</span>
+                    </div>
+                </label>
+                
+                <label class="need-option">
+                    <input type="checkbox" name="needs" value="Marketing Support">
+                    <div class="need-card">
+                        <span class="need-icon">📈</span>
+                        <span class="need-label">Marketing Support</span>
+                    </div>
+                </label>
+                
+                <label class="need-option">
+                    <input type="checkbox" name="needs" value="Email & Office">
+                    <div class="need-card">
+                        <span class="need-icon">📧</span>
+                        <span class="need-label">Email & Office</span>
+                    </div>
+                </label>
+                
+                <label class="need-option">
+                    <input type="checkbox" name="needs" value="Nothing specific">
+                    <div class="need-card">
+                        <span class="need-icon">💭</span>
+                        <span class="need-label">Just Exploring</span>
+                    </div>
+                </label>
+            </div>
+            
+            <div class="button-group">
+                <button class="back-btn" onclick="goToStep1()">← Back</button>
+                <button class="next-btn" onclick="goToStep3()">Analyze Website →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Running Analysis -->
+        <div class="step-container hidden" id="step3">
+            <div class="analysis-container">
+                <h2>Analyzing Website Performance</h2>
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p id="loadingText">Starting analysis...</p>
+                </div>
+                <div class="loading-steps">
+                    <div class="loading-step" id="loading1">🔍 Checking website speed...</div>
+                    <div class="loading-step" id="loading2">📊 Analyzing user experience...</div>
+                    <div class="loading-step" id="loading3">🎯 Evaluating SEO performance...</div>
+                    <div class="loading-step" id="loading4">✅ Generating recommendations...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Results -->
+        <div class="step-container hidden" id="step4">
+            <h2>Website Performance Results</h2>
+            <p class="results-intro">Hi <span id="clientName"></span>! Here's how <span id="clientDomain"></span> is performing:</p>
+            
+            <div class="results-container">
+                <!-- Overall Score -->
+                <div class="overall-score-section">
+                    <h3>Overall Website Health</h3>
+                    <div class="big-score" id="overallScore">
+                        <div class="score-circle">
+                            <span class="score-number">-</span>
+                        </div>
+                        <div class="score-label">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Individual Scores -->
+                <div class="detailed-scores">
+                    <div class="score-item">
+                        <h4>⚡ Website Speed</h4>
+                        <div class="score-bar">
+                            <div class="score-fill" id="speedFill"></div>
+                        </div>
+                        <div class="score-details">
+                            <span class="score-percent" id="speedScore">-</span>
+                            <p class="score-meaning" id="speedMeaning">Analyzing...</p>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <h4>♿ Accessibility</h4>
+                        <div class="score-bar">
+                            <div class="score-fill" id="accessibilityFill"></div>
+                        </div>
+                        <div class="score-details">
+                            <span class="score-percent" id="accessibilityScore">-</span>
+                            <p class="score-meaning" id="accessibilityMeaning">Analyzing...</p>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <h4>🛡️ Best Practices</h4>
+                        <div class="score-bar">
+                            <div class="score-fill" id="bestPracticesFill"></div>
+                        </div>
+                        <div class="score-details">
+                            <span class="score-percent" id="bestPracticesScore">-</span>
+                            <p class="score-meaning" id="bestPracticesMeaning">Analyzing...</p>
+                        </div>
+                    </div>
+
+                    <div class="score-item">
+                        <h4>🔍 SEO (Search Visibility)</h4>
+                        <div class="score-bar">
+                            <div class="score-fill" id="seoFill"></div>
+                        </div>
+                        <div class="score-details">
+                            <span class="score-percent" id="seoScore">-</span>
+                            <p class="score-meaning" id="seoMeaning">Analyzing...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Insights -->
+                <div class="insights-section">
+                    <h3>📋 What This Means For You</h3>
+                    <div id="keyInsights" class="insights-content">
+                        <!-- Insights will be generated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="recommendations-section">
+                    <h3>💡 Recommended Actions</h3>
+                    <div id="recommendations" class="recommendations-content">
+                        <!-- Recommendations will be generated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Email Template -->
+                <div class="email-section">
+                    <h3>📧 Ready-to-Send Email Report</h3>
+                    <p class="email-instructions">Copy this personalized report to send to your client:</p>
+                    <div class="email-script-container">
+                        <textarea id="emailScript" readonly></textarea>
+                        <button class="copy-btn" onclick="copyEmailScript()">Copy Email</button>
+                    </div>
+                    <div id="copyNotification" class="copy-notification hidden">✓ Copied to clipboard!</div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group">
+                    <button class="back-btn" onclick="startOver()">Test Another Site</button>
+                    <button class="action-btn" onclick="window.print()">Print Report</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
         <div id="error" class="error hidden"></div>
-        
-        <div id="results" class="results hidden">
-            <h2>Performance Results</h2>
-            
-            <div class="scores-grid">
-                <div class="score-card">
-                    <h3>Performance</h3>
-                    <div class="score" id="performanceScore">-</div>
-                </div>
-                <div class="score-card">
-                    <h3>Accessibility</h3>
-                    <div class="score" id="accessibilityScore">-</div>
-                </div>
-                <div class="score-card">
-                    <h3>Best Practices</h3>
-                    <div class="score" id="bestPracticesScore">-</div>
-                </div>
-                <div class="score-card">
-                    <h3>SEO</h3>
-                    <div class="score" id="seoScore">-</div>
-                </div>
-            </div>
-            
-            <div class="metrics">
-                <h3>Core Web Vitals</h3>
-                <div class="metric">
-                    <span class="metric-label">First Contentful Paint:</span>
-                    <span class="metric-value" id="fcp">-</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Largest Contentful Paint:</span>
-                    <span class="metric-value" id="lcp">-</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Total Blocking Time:</span>
-                    <span class="metric-value" id="tbt">-</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Cumulative Layout Shift:</span>
-                    <span class="metric-value" id="cls">-</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Speed Index:</span>
-                    <span class="metric-value" id="speedIndex">-</span>
-                </div>
-            </div>
-            
-            <div class="device-toggle">
-                <button class="device-btn active" onclick="switchDevice('mobile')">Mobile</button>
-                <button class="device-btn" onclick="switchDevice('desktop')">Desktop</button>
-            </div>
-            
-            <!-- Email Script Section -->
-            <div class="email-section">
-                <h3>📧 Email Script</h3>
-                <p class="email-instructions">Copy this personalized email script to send to your client:</p>
-                <div class="email-script-container">
-                    <textarea id="emailScript" readonly></textarea>
-                    <button class="copy-btn" onclick="copyEmailScript()">Copy to Clipboard</button>
-                </div>
-                <div id="copyNotification" class="copy-notification hidden">✓ Copied to clipboard!</div>
-            </div>
-        </div>
     </div>
     
     <script src="script.js"></script>
