@@ -1,5 +1,5 @@
 // Replace YOUR_API_KEY_HERE with your actual API key (or use simple version below)
-const API_KEY = 'AIzaSyDRc8_WBugCGaX5zsLPJe86_WIe64aAg4g';
+const API_KEY = 'AIzaSyCxgTk1lBlOa-uzuyEolsu6aqaiuSVoCM4';
 let currentDevice = 'mobile';
 let lastTestedDomain = '';
 let testResults = null;
