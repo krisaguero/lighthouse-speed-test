@@ -1,5 +1,183 @@
-// Replace YOUR_API_KEY_HERE with your actual API key (or use simple version below)
 const API_KEY = 'AIzaSyCxgTk1lBlOa-uzuyEolsu6aqaiuSVoCM4';
+
+// Global variables
+let clientData = {
+    firstName: '',
+    domain: '',
+    needs: [],
+    cartLink: '',
+    upfrontCost: '',
+    monthlyCost: '',
+    results: null
+};
+
+// Modal Control Functions
+function openStep1() {
+    document.getElementById('modal-overlay').classList.remove('hidden');
+    document.getElementById('step1-modal').classList.remove('hidden');
+}
+
+function closeModals() {
+    document.getElementById('modal-overlay').classList.add('hidden');
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.classList.add('hidden');
+    });
+    // Clear loading steps
+    document.querySelectorAll('.loading-step').forEach(step => {
+        step.classList.remove('active');
+    });
+}
+
+function showModal(modalId) {
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.classList.add('hidden');
+    });
+    document.getElementById(modalId).classList.remove('hidden');
+}
+
+// Step Processing Functions
+function processStep1() {
+    const firstName = document.getElementById('firstName').value.trim();
+    const domain = document.getElementById('domain').value.trim();
+    
+    if (!firstName) {
+        alert('Please enter the client\'s first name');
+        return;
+    }
+    
+    if (!domain) {
+        alert('Please enter a website domain');
+        return;
+    }
+    
+    clientData.firstName = firstName;
+    clientData.domain = domain;
+    
+    showModal('step2-modal');
+}
+
+function processStep2() {
+    const selectedNeeds = [];
+    document.querySelectorAll('input[name="needs"]:checked').forEach(checkbox => {
+        selectedNeeds.push(checkbox.value);
+    });
+    
+    if (selectedNeeds.length === 0) {
+        alert('Please select at least one service option');
+        return;
+    }
+    
+    clientData.needs = selectedNeeds;
+    showModal('step3-modal');
+}
+
+function processStep3() {
+    const cartLink = document.getElementById('cartLink').value.trim();
+    const upfrontCost = document.getElementById('upfrontCost').value.trim();
+    const monthlyCost = document.getElementById('monthlyCost').value.trim();
+    
+    if (!cartLink) {
+        alert('Please enter the cart link');
+        return;
+    }
+    
+    clientData.cartLink = cartLink;
+    clientData.upfrontCost = upfrontCost || '1149';
+    clientData.monthlyCost = monthlyCost || '109';
+    
+    showModal('loading-modal');
+    runAnalysis();
+}
+
+// Navigation Functions
+function backToStep1() {
+    showModal('step1-modal');
+}
+
+function backToStep2() {
+    showModal('step2-modal');
+}
+
+// Analysis Function
+async function runAnalysis() {
+    const loadingSteps = ['loading1', 'loading2', 'loading3', 'loading4'];
+    let currentLoadingStep = 0;
+    
+    // Show loading steps progressively
+    const loadingInterval = setInterval(() => {
+        if (currentLoadingStep < loadingSteps.length) {
+            document.getElementById(loadingSteps[currentLoadingStep]).classList.add('active');
+            currentLoadingStep++;
+        }
+    }, 800);
+    
+    try {
+        // Clean up domain
+        let url = clientData.domain;
+        if (!url.startsWith('http')) {
+            url = `https://${url}`;
+        }
+        
+        // For simple version without API key
+        if (API_KEY === 'YOUR_API_KEY_HERE') {
+            setTimeout(() => {
+                clearInterval(loadingInterval);
+                // Simulate results
+                clientData.results = {
+                    lighthouseResult: {
+                        categories: {
+                            performance: { score: 0.65 },
+                            accessibility: { score: 0.82 },
+                            'best-practices': { score: 0.75 },
+                            seo: { score: 0.88 }
+                        }
+                    }
+                };
+                displayResults();
+            }, 3200);
+            return;
+        }
+        
+        // API version
+        const apiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&key=${API_KEY}`;
+        
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+            throw new Error('Failed to analyze website');
+        }
+        
+        const data = await response.json();
+        clientData.results = data;
+        
+        clearInterval(loadingInterval);
+        
+        // Show all loading steps as complete
+        loadingSteps.forEach(step => {
+            document.getElementById(step).classList.add('active');
+        });
+        
+        // Wait a moment then show results
+        setTimeout(() => {
+            displayResults();
+        }, 1000);
+        
+    } catch (error) {
+        clearInterval(loadingInterval);
+        alert('Unable to analyze the website. Please check the domain and try again.');
+        console.error(error);
+        showModal('step3-modal');
+    }
+}
+
+// Generate Line Items
+function generateLineItems() {
+    let items = [];
+    
+    // Always include base items
+
+
+
 let currentDevice = 'mobile';
 let lastTestedDomain = '';
 let testResults = null;
