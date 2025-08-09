@@ -3,246 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Performance Analyzer</title>
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MKKME6YTW6"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-MKKME6YTW6');
-</script>
+    <title>Website Speed Test - Professional Analysis Tool</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>🚀 Website Performance Analyzer</h1>
-        <p class="subtitle">Let's analyze your client's website performance</p>
-        
-        <!-- Progress Indicator -->
-        <div class="progress-bar">
-            <div class="progress-step active" id="step1-indicator">
-                <span class="step-number">1</span>
-                <span class="step-label">Project Info</span>
-            </div>
-            <div class="progress-step" id="step2-indicator">
-                <span class="step-number">2</span>
-                <span class="step-label">Client Needs</span>
-            </div>
-            <div class="progress-step" id="step3-indicator">
-                <span class="step-number">3</span>
-                <span class="step-label">Analysis</span>
-            </div>
-            <div class="progress-step" id="step4-indicator">
-                <span class="step-number">4</span>
-                <span class="step-label">Results</span>
-            </div>
-        </div>
+        <header>
+            <h1>Website Speed Test</h1>
+            <p class="subtitle">Get a comprehensive performance analysis of your website</p>
+        </header>
 
-        <!-- Step 1: Project Information -->
-        <div class="step-container" id="step1">
-            <h2>Step 1: Tell me about the project</h2>
-            <p class="step-description">Let's start with some basic information about your client.</p>
-            
-            <div class="form-section">
+        <main>
+            <form id="speedTestForm">
                 <div class="form-group">
-                    <label for="firstName">Client's First Name</label>
-                    <input type="text" id="firstName" placeholder="Enter client's first name" />
+                    <label for="url">Website URL</label>
+                    <input 
+                        type="url" 
+                        id="url" 
+                        name="url" 
+                        placeholder="https://example.com" 
+                        required
+                        pattern="https?://.*"
+                    >
+                    <span class="error-message" id="urlError"></span>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="domain">Website Domain</label>
-                    <input type="text" id="domain" placeholder="example.com or https://example.com" />
-                    <small>Enter the website you want to analyze</small>
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="your@email.com" 
+                        required
+                    >
+                    <span class="error-message" id="emailError"></span>
                 </div>
-                
-                <button class="next-btn" onclick="goToStep2()">Next Step →</button>
-            </div>
-        </div>
 
-        <!-- Step 2: Client Needs -->
-        <div class="step-container hidden" id="step2">
-            <h2>Step 2: What does the client need?</h2>
-            <p class="step-description">Select the services the client might be interested in (you can select multiple).</p>
-            
-            <div class="needs-grid">
-                <label class="need-option">
-                    <input type="checkbox" name="needs" value="Website Security">
-                    <div class="need-card">
-                        <span class="need-icon">🔒</span>
-                        <span class="need-label">Website Security</span>
-                    </div>
-                </label>
-                
-                <label class="need-option">
-                    <input type="checkbox" name="needs" value="Website Design">
-                    <div class="need-card">
-                        <span class="need-icon">🎨</span>
-                        <span class="need-label">Website Design</span>
-                    </div>
-                </label>
-                
-                <label class="need-option">
-                    <input type="checkbox" name="needs" value="Support for existing website">
-                    <div class="need-card">
-                        <span class="need-icon">🛠️</span>
-                        <span class="need-label">Website Support</span>
-                    </div>
-                </label>
-                
-                <label class="need-option">
-                    <input type="checkbox" name="needs" value="Marketing Support">
-                    <div class="need-card">
-                        <span class="need-icon">📈</span>
-                        <span class="need-label">Marketing Support</span>
-                    </div>
-                </label>
-                
-                <label class="need-option">
-                    <input type="checkbox" name="needs" value="Email & Office">
-                    <div class="need-card">
-                        <span class="need-icon">📧</span>
-                        <span class="need-label">Email & Office</span>
-                    </div>
-                </label>
-                
-                <label class="need-option">
-                    <input type="checkbox" name="needs" value="Nothing specific">
-                    <div class="need-card">
-                        <span class="need-icon">💭</span>
-                        <span class="need-label">Just Exploring</span>
-                    </div>
-                </label>
-            </div>
-            
-            <div class="button-group">
-                <button class="back-btn" onclick="goToStep1()">← Back</button>
-                <button class="next-btn" onclick="goToStep3()">Analyze Website →</button>
-            </div>
-        </div>
+                <div class="pricing-section">
+                    <h3>Interested in improving your website?</h3>
+                    <p class="pricing-subtitle">Select services you'd like to learn more about:</p>
+                    
+                    <div class="pricing-options">
+                        <label class="pricing-option">
+                            <input type="checkbox" name="services" value="standard">
+                            <div class="option-content">
+                                <div class="option-header">
+                                    <span class="option-title">Standard Web Design</span>
+                                    <span class="option-price">Starting at $2,500</span>
+                                </div>
+                                <p class="option-description">Professional 5-page website with responsive design</p>
+                            </div>
+                        </label>
 
-        <!-- Step 3: Running Analysis -->
-        <div class="step-container hidden" id="step3">
-            <div class="analysis-container">
-                <h2>Analyzing Website Performance</h2>
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p id="loadingText">Starting analysis...</p>
+                        <label class="pricing-option">
+                            <input type="checkbox" name="services" value="premium">
+                            <div class="option-content">
+                                <div class="option-header">
+                                    <span class="option-title">Premium Web Design</span>
+                                    <span class="option-price">Starting at $5,000</span>
+                                </div>
+                                <p class="option-description">Custom design with advanced features and animations</p>
+                            </div>
+                        </label>
+
+                        <label class="pricing-option">
+                            <input type="checkbox" name="services" value="store">
+                            <div class="option-content">
+                                <div class="option-header">
+                                    <span class="option-title">Premium Store Design</span>
+                                    <span class="option-price">Starting at $7,500</span>
+                                </div>
+                                <p class="option-description">Full e-commerce solution with payment integration</p>
+                            </div>
+                        </label>
+                    </div>
                 </div>
-                <div class="loading-steps">
-                    <div class="loading-step" id="loading1">🔍 Checking website speed...</div>
-                    <div class="loading-step" id="loading2">📊 Analyzing user experience...</div>
-                    <div class="loading-step" id="loading3">🎯 Evaluating SEO performance...</div>
-                    <div class="loading-step" id="loading4">✅ Generating recommendations...</div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Step 4: Results -->
-        <div class="step-container hidden" id="step4">
-            <h2>Website Performance Results</h2>
-            <p class="results-intro">Hi <span id="clientName"></span>! Here's how <span id="clientDomain"></span> is performing:</p>
-            
-            <div class="results-container">
-                <!-- Overall Score -->
-                <div class="overall-score-section">
-                    <h3>Overall Website Health</h3>
-                    <div class="big-score" id="overallScore">
+                <button type="submit" id="submitBtn">
+                    <span class="btn-text">Analyze Website</span>
+                    <span class="btn-loader" style="display: none;">
+                        <svg class="spinner" viewBox="0 0 50 50">
+                            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                        </svg>
+                    </span>
+                </button>
+            </form>
+
+            <div id="results" class="results-container" style="display: none;">
+                <h2>Performance Results</h2>
+                <div class="scores-grid">
+                    <div class="score-card" data-metric="performance">
                         <div class="score-circle">
-                            <span class="score-number">-</span>
+                            <svg viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" stroke-width="12"/>
+                                <circle class="score-ring" cx="60" cy="60" r="54" fill="none" stroke-width="12" 
+                                        stroke-dasharray="339.292" stroke-dashoffset="339.292"
+                                        transform="rotate(-90 60 60)"/>
+                            </svg>
+                            <div class="score-text">--</div>
                         </div>
-                        <div class="score-label">Loading...</div>
+                        <h3>Performance</h3>
+                        <p class="score-description">Overall speed score</p>
+                    </div>
+
+                    <div class="score-card" data-metric="accessibility">
+                        <div class="score-circle">
+                            <svg viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" stroke-width="12"/>
+                                <circle class="score-ring" cx="60" cy="60" r="54" fill="none" stroke-width="12" 
+                                        stroke-dasharray="339.292" stroke-dashoffset="339.292"
+                                        transform="rotate(-90 60 60)"/>
+                            </svg>
+                            <div class="score-text">--</div>
+                        </div>
+                        <h3>Accessibility</h3>
+                        <p class="score-description">Usability for all users</p>
+                    </div>
+
+                    <div class="score-card" data-metric="seo">
+                        <div class="score-circle">
+                            <svg viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" stroke-width="12"/>
+                                <circle class="score-ring" cx="60" cy="60" r="54" fill="none" stroke-width="12" 
+                                        stroke-dasharray="339.292" stroke-dashoffset="339.292"
+                                        transform="rotate(-90 60 60)"/>
+                            </svg>
+                            <div class="score-text">--</div>
+                        </div>
+                        <h3>SEO</h3>
+                        <p class="score-description">Search engine optimization</p>
+                    </div>
+
+                    <div class="score-card" data-metric="best-practices">
+                        <div class="score-circle">
+                            <svg viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" stroke-width="12"/>
+                                <circle class="score-ring" cx="60" cy="60" r="54" fill="none" stroke-width="12" 
+                                        stroke-dasharray="339.292" stroke-dashoffset="339.292"
+                                        transform="rotate(-90 60 60)"/>
+                            </svg>
+                            <div class="score-text">--</div>
+                        </div>
+                        <h3>Best Practices</h3>
+                        <p class="score-description">Web standards</p>
                     </div>
                 </div>
 
-                <!-- Individual Scores -->
-                <div class="detailed-scores">
-                    <div class="score-item">
-                        <h4>⚡ Website Speed</h4>
-                        <div class="score-bar">
-                            <div class="score-fill" id="speedFill"></div>
-                        </div>
-                        <div class="score-details">
-                            <span class="score-percent" id="speedScore">-</span>
-                            <p class="score-meaning" id="speedMeaning">Analyzing...</p>
-                        </div>
-                    </div>
-
-                    <div class="score-item">
-                        <h4>♿ Accessibility</h4>
-                        <div class="score-bar">
-                            <div class="score-fill" id="accessibilityFill"></div>
-                        </div>
-                        <div class="score-details">
-                            <span class="score-percent" id="accessibilityScore">-</span>
-                            <p class="score-meaning" id="accessibilityMeaning">Analyzing...</p>
-                        </div>
-                    </div>
-
-                    <div class="score-item">
-                        <h4>🛡️ Best Practices</h4>
-                        <div class="score-bar">
-                            <div class="score-fill" id="bestPracticesFill"></div>
-                        </div>
-                        <div class="score-details">
-                            <span class="score-percent" id="bestPracticesScore">-</span>
-                            <p class="score-meaning" id="bestPracticesMeaning">Analyzing...</p>
-                        </div>
-                    </div>
-
-                    <div class="score-item">
-                        <h4>🔍 SEO (Search Visibility)</h4>
-                        <div class="score-bar">
-                            <div class="score-fill" id="seoFill"></div>
-                        </div>
-                        <div class="score-details">
-                            <span class="score-percent" id="seoScore">-</span>
-                            <p class="score-meaning" id="seoMeaning">Analyzing...</p>
-                        </div>
-                    </div>
+                <div class="email-template">
+                    <h3>Email Report</h3>
+                    <button id="copyBtn" class="copy-btn">Copy to Clipboard</button>
+                    <pre id="emailContent"></pre>
                 </div>
 
-                <!-- Key Insights -->
-                <div class="insights-section">
-                    <h3>📋 What This Means For You</h3>
-                    <div id="keyInsights" class="insights-content">
-                        <!-- Insights will be generated dynamically -->
-                    </div>
-                </div>
-
-                <!-- Recommendations -->
-                <div class="recommendations-section">
-                    <h3>💡 Recommended Actions</h3>
-                    <div id="recommendations" class="recommendations-content">
-                        <!-- Recommendations will be generated dynamically -->
-                    </div>
-                </div>
-
-                <!-- Email Template -->
-                <div class="email-section">
-                    <h3>📧 Ready-to-Send Email Report</h3>
-                    <p class="email-instructions">Copy this personalized report to send to your client:</p>
-                    <div class="email-script-container">
-                        <textarea id="emailScript" readonly></textarea>
-                        <button class="copy-btn" onclick="copyEmailScript()">Copy Email</button>
-                    </div>
-                    <div id="copyNotification" class="copy-notification hidden">✓ Copied to clipboard!</div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="button-group">
-                    <button class="back-btn" onclick="startOver()">Test Another Site</button>
-                    <button class="action-btn" onclick="window.print()">Print Report</button>
-                </div>
+                <button id="newTestBtn" class="new-test-btn">Run New Test</button>
             </div>
-        </div>
-
-        <!-- Error Message -->
-        <div id="error" class="error hidden"></div>
+        </main>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
