@@ -1,47 +1,187 @@
+// ---- Settings ----
 const PSI_ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
+const API_KEY = "AIzaSyCxgTk1lBlOa-uzuyEolsu6aqaiuSVoCM4"; // Optional but recommended. Restrict by HTTP referrer in GCP.
 
-// IMPORTANT: Do NOT commit real keys to public repos. If you must use a key on the frontend, // rotate it and restrict by HTTP referrer in Google Cloud Console. const API_KEY = ""; // paste your key locally if needed; keep blank when committing
+// ---- DOM ----
+const steps = {
+  1: document.getElementById("step1"),
+  2: document.getElementById("step2"),
+  3: document.getElementById("step3"),
+  4: document.getElementById("step4"),
+};
 
-// Step containers const step1 = document.getElementById("step1"); const step2 = document.getElementById("step2"); const step3 = document.getElementById("step3"); const step4 = document.getElementById("step4");
+const indicators = {
+  1: document.getElementById("step1-indicator"),
+  2: document.getElementById("step2-indicator"),
+  3: document.getElementById("step3-indicator"),
+  4: document.getElementById("step4-indicator"),
+};
 
-// Step indicators const ind1 = document.getElementById("step1-indicator"); const ind2 = document.getElementById("step2-indicator"); const ind3 = document.getElementById("step3-indicator"); const ind4 = document.getElementById("step4-indicator");
+const firstNameInput = document.getElementById("firstName");
+const domainInput = document.getElementById("domain");
+const errorEl = document.getElementById("error");
 
-// Inputs const firstNameInput = document.getElementById("firstName"); const domainInput = document.getElementById("domain");
+const clientNameEl = document.getElementById("clientName");
+const clientDomainEl = document.getElementById("clientDomain");
 
-// Loading UI const loadingText = document.getElementById("loadingText"); const loadingSteps = [ document.getElementById("loading1"), document.getElementById("loading2"), document.getElementById("loading3"), document.getElementById("loading4"), ];
+const overallScoreEl = document.getElementById("overallScore");
+const speedFill = document.getElementById("speedFill");
+const accessibilityFill = document.getElementById("accessibilityFill");
+const bestPracticesFill = document.getElementById("bestPracticesFill");
+const seoFill = document.getElementById("seoFill");
 
-// Results UI const clientNameEl = document.getElementById("clientName"); const clientDomainEl = document.getElementById("clientDomain");
+const speedScoreEl = document.getElementById("speedScore");
+const accessibilityScoreEl = document.getElementById("accessibilityScore");
+const bestPracticesScoreEl = document.getElementById("bestPracticesScore");
+const seoScoreEl = document.getElementById("seoScore");
 
-const overallScoreEl = document.querySelector("#overallScore .score-number"); const overallLabelEl = document.querySelector("#overallScore .score-label");
+const speedMeaningEl = document.getElementById("speedMeaning");
+const accessibilityMeaningEl = document.getElementById("accessibilityMeaning");
+const bestPracticesMeaningEl = document.getElementById("bestPracticesMeaning");
+const seoMeaningEl = document.getElementById("seoMeaning");
 
-const speedFill = document.getElementById("speedFill"); const accessibilityFill = document.getElementById("accessibilityFill"); const bestPracticesFill = document.getElementById("bestPracticesFill"); const seoFill = document.getElementById("seoFill");
+const keyInsightsEl = document.getElementById("keyInsights");
+const recommendationsEl = document.getElementById("recommendations");
+const emailScriptEl = document.getElementById("emailScript");
+const copyNotification = document.getElementById("copyNotification");
 
-const speedScoreEl = document.getElementById("speedScore"); const accessibilityScoreEl = document.getElementById("accessibilityScore"); const bestPracticesScoreEl = document.getElementById("bestPracticesScore"); const seoScoreEl = document.getElementById("seoScore");
+const loadingText = document.getElementById("loadingText");
+const loadingSteps = [
+  document.getElementById("loading1"),
+  document.getElementById("loading2"),
+  document.getElementById("loading3"),
+  document.getElementById("loading4"),
+];
 
-const speedMeaningEl = document.getElementById("speedMeaning"); const accessibilityMeaningEl = document.getElementById("accessibilityMeaning"); const bestPracticesMeaningEl = document.getElementById("bestPracticesMeaning"); const seoMeaningEl = document.getElementById("seoMeaning");
+// ---- Navigation ----
+function showStep(n) {
+  Object.values(steps).forEach(el => el.classList.add("hidden"));
+  steps[n].classList.remove("hidden");
+  Object.values(indicators).forEach(el => el.classList.remove("active"));
+  for (let i = 1; i <= n; i++) indicators[i].classList.add("active");
+}
 
-const keyInsightsEl = document.getElementById("keyInsights"); const recommendationsEl = document.getElementById("recommendations");
+function goToStep1() { showStep(1); }
+function goToStep2() {
+  if (!firstNameInput.value.trim() || !domainInput.value.trim()) {
+    showError("Please enter the client's first name and website domain.");
+    return;
+  }
+  hideError(); showStep(2);
+}
+function goToStep3() {
+  hideError(); showStep(3);
+  startAnalysis();
+}
+function goToStep4() { hideError(); showStep(4); }
 
-// Email const emailScriptEl = document.getElementById("emailScript"); const copyNotification = document.getElementById("copyNotification");
+// ---- Helpers ----
+function showError(msg) {
+  errorEl.textContent = msg;
+  errorEl.classList.remove("hidden");
+}
+function hideError() {
+  errorEl.textContent = "";
+  errorEl.classList.add("hidden");
+}
 
-// Error area const errorEl = document.getElementById("error");
+function normalizeUrl(input) {
+  let url = input.trim();
+  if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+  try { return new URL(url).toString(); } catch { return null; }
+}
 
-function showStep(stepNumber) { [step1, step2, step3, step4].forEach(s => s.classList.add("hidden")); [ind1, ind2, ind3, ind4].forEach(i => i.classList.remove("active")); if (stepNumber === 1) { step1.classList.remove("hidden"); ind1.classList.add("active"); } if (stepNumber === 2) { step2.classList.remove("hidden"); ind1.classList.add("active"); ind2.classList.add("active"); } if (stepNumber === 3) { step3.classList.remove("hidden"); ind1.classList.add("active"); ind2.classList.add("active"); ind3.classList.add("active"); } if (stepNumber === 4) { step4.classList.remove("hidden"); [ind1, ind2, ind3, ind4].forEach(i => i.classList.add("active")); } }
+function pct(n) { return `${Math.round(n)}%`; }
+function grade(score) {
+  if (score >= 90) return { label: "Good", class: "good" };
+  if (score >= 50) return { label: "Needs improvement", class: "average" };
+  return { label: "Poor", class: "poor" };
+}
 
-function showError(msg) { errorEl.textContent = msg; errorEl.classList.remove("hidden"); } function hideError() { errorEl.textContent = ""; errorEl.classList.add("hidden"); }
+function setBar(fillEl, score) {
+  fillEl.style.width = `${score}%`;
+  fillEl.classList.remove("good","average","poor");
+  fillEl.classList.add(grade(score).class);
+}
 
-function normalizeUrl(input) { let v = input.trim(); if (!/^https?:///i.test(v)) v = "https://" + v; try { return new URL(v).toString(); } catch { return null; } }
+function msToSec(ms) { return (ms / 1000).toFixed(2); }
 
-function grade(score) { if (score >= 90) return { label: "Excellent", cls: "good" }; if (score >= 50) return { label: "Needs improvement", cls: "average" }; return { label: "Poor", cls: "poor" }; }
+// ---- Analysis ----
+async function startAnalysis() {
+  // Visual progression
+  setLoading(0, "🔍 Checking website speed...");
+  const url = normalizeUrl(domainInput.value);
+  if (!url) { showError("Please enter a valid URL."); showStep(1); return; }
 
-function setBar(fillEl, score) { fillEl.style.width = ${score}%; fillEl.classList.remove("good","average","poor"); fillEl.classList.add(grade(score).cls); }
+  clientNameEl.textContent = firstNameInput.value.trim();
+  clientDomainEl.textContent = new URL(url).host;
 
-function percent(x) { return ${Math.round(x)}%; }
+  try {
+    const data = await fetchPSI(url, "mobile");
+    setLoading(1, "📊 Analyzing user experience...");
+    populateResults(data);
 
-function setLoading(stageIndex, text) { if (stageIndex >= 0 && stageIndex < loadingSteps.length) { loadingSteps[stageIndex].classList.add("active"); } loadingText.textContent = text; }
+    setLoading(2, "🎯 Evaluating SEO performance...");
+    // Small pause for UX
+    await sleep(250);
 
-async function fetchPSI(url, strategy = "mobile") { const params = new URLSearchParams({ url, strategy, category: "performance", }); // Add all categories explicitly ["accessibility", "best-practices", "seo"].forEach(c => params.append("category", c)); if (API_KEY) params.append("key", API_KEY);
+    setLoading(3, "✅ Generating recommendations...");
+    buildInsightsAndRecommendations(data);
 
-const res = await fetch(${PSI_ENDPOINT}?${params.toString()}); if (!res.ok) { let text = ""; try { text = await res.text(); } catch {} if (res.status === 429) throw new Error("Rate limit reached. Please wait a minute and try again."); throw new Error(PageSpeed API error ${res.status}${text ? ": " + text : ""}); } return res.json(); }
+    setLoading(4, "Done");
+    goToStep4();
+  } catch (e) {
+    console.error(e);
+    showError(e.message || "Failed to analyze the site. Please try again.");
+    showStep(1);
+  }
+}
 
-// Public functions used by your HTML onclick handlers window.goToStep1 = function goToStep1() { showStep(1); }; window.goToStep2 = function goToStep2() { hideError(); if (!firstNameInput.value.trim() || !domainInput.value.trim()) { showError("Please enter the client's first name and website domain."); return; } showStep(2); }; window.goToStep3 = function goToStep3() { hideError(); showStep(3); startAnalysis(); }; window.startOver = function startOver() { // Reset inputs and UI firstNameInput.value = ""; domainInput.value = ""; document.querySelectorAll('input[name="needs"]').forEach(cb => cb.checked = false); keyInsightsEl.innerHTML = ""; recommendationsEl.innerHTML = ""; emailScriptEl.value = ""; copyNotification.classList.add("hidden"); loadingSteps.forEach(s => s.classList.remove("active")); overallScoreEl.textContent = "-"; overallLabelEl.textContent = "Loading..."; [speedFill, accessibilityFill, bestPracticesFill, seoFill].forEach(el => { el.style.width = "0%
+function sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
+
+function setLoading(stageIndex, text) {
+  if (stageIndex < loadingSteps.length) {
+    loadingSteps[stageIndex].classList.add("active");
+  }
+  loadingText.textContent = text;
+}
+
+async function fetchPSI(url, strategy = "mobile") {
+  const params = new URLSearchParams({
+    url,
+    strategy,
+    category: "performance",
+    category: "accessibility",
+    "category": "best-practices",
+    "category": "seo",
+  });
+  if (API_KEY) params.append("key", API_KEY);
+
+  const resp = await fetch(`${PSI_ENDPOINT}?${params.toString()}`);
+  if (!resp.ok) {
+    const text = await resp.text().catch(() => "");
+    throw new Error(`PSI error ${resp.status}: ${text || resp.statusText}`);
+  }
+  return resp.json();
+}
+
+function populateResults(data) {
+  const lr = data.lighthouseResult;
+
+  const scores = {
+    performance: Math.round((lr.categories.performance?.score ?? 0) * 100),
+    accessibility: Math.round((lr.categories.accessibility?.score ?? 0) * 100),
+    bestPractices: Math.round((lr.categories["best-practices"]?.score ?? 0) * 100),
+    seo: Math.round((lr.categories.seo?.score ?? 0) * 100),
+  };
+
+  // Bars + labels
+  speedScoreEl.textContent = pct(scores.performance);
+  accessibilityScoreEl.textContent = pct(scores.accessibility);
+  bestPracticesScoreEl.textContent = pct(scores.bestPractices);
+  seoScoreEl.textContent = pct(scores.seo);
+
+  speedMeaningEl.textContent = grade(scores.performance).label;
+  accessibilityMeaningEl.textContent = grade(scores.accessibility).label;
+  bestPracticesMeaningEl.textContent = grade(scores.bestPractices).label;
+  seoMeaningEl.textContent = grade(scores.seo).label;
