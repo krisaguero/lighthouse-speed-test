@@ -1,167 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Speed Test - Professional Analysis Tool</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lighthouse Client Report Builder</title>
+  <meta name="description" content="Analyze a website with Lighthouse (PageSpeed Insights), build a proposal, and generate a client email." />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Optional: GA can go here -->
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Website Speed Test</h1>
-            <p class="subtitle">Get a comprehensive performance analysis of your website</p>
-        </header>
-
-        <main>
-            <form id="speedTestForm">
-                <div class="form-group">
-                    <label for="url">Website URL</label>
-                    <input 
-                        type="url" 
-                        id="url" 
-                        name="url" 
-                        placeholder="https://example.com" 
-                        required
-                        pattern="https?://.*"
-                    >
-                    <span class="error-message" id="urlError"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        placeholder="your@email.com" 
-                        required
-                    >
-                    <span class="error-message" id="emailError"></span>
-                </div>
-
-                <div class="pricing-section">
-                    <h3>Interested in improving your website?</h3>
-                    <p class="pricing-subtitle">Select services you'd like to learn more about:</p>
-                    
-                    <div class="pricing-options">
-                        <label class="pricing-option">
-                            <input type="checkbox" name="services" value="standard">
-                            <div class="option-content">
-                                <div class="option-header">
-                                    <span class="option-title">Standard Web Design</span>
-                                    <span class="option-price">Starting at $2,500</span>
-                                </div>
-                                <p class="option-description">Professional 5-page website with responsive design</p>
-                            </div>
-                        </label>
-
-                        <label class="pricing-option">
-                            <input type="checkbox" name="services" value="premium">
-                            <div class="option-content">
-                                <div class="option-header">
-                                    <span class="option-title">Premium Web Design</span>
-                                    <span class="option-price">Starting at $5,000</span>
-                                </div>
-                                <p class="option-description">Custom design with advanced features and animations</p>
-                            </div>
-                        </label>
-
-                        <label class="pricing-option">
-                            <input type="checkbox" name="services" value="store">
-                            <div class="option-content">
-                                <div class="option-header">
-                                    <span class="option-title">Premium Store Design</span>
-                                    <span class="option-price">Starting at $7,500</span>
-                                </div>
-                                <p class="option-description">Full e-commerce solution with payment integration</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <button type="submit" id="submitBtn">
-                    <span class="btn-text">Analyze Website</span>
-                    <span class="btn-loader" style="display: none;">
-                        <svg class="spinner" viewBox="0 0 50 50">
-                            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-                        </svg>
-                    </span>
-                </button>
-            </form>
-
-            <div id="results" class="results-container" style="display: none;">
-                <h2>Performance Results</h2>
-                <div class="scores-grid">
-                    <div class="score-card" data-metric="performance">
-                        <div class="score-circle">
-                            <svg viewBox="0 0 120 120">
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" stroke-width="12"/>
-                                <circle class="score-ring" cx="60" cy="60" r="54" fill="none" stroke-width="12" 
-                                        stroke-dasharray="339.292" stroke-dashoffset="339.292"
-                                        transform="rotate(-90 60 60)"/>
-                            </svg>
-                            <div class="score-text">--</div>
-                        </div>
-                        <h3>Performance</h3>
-                        <p class="score-description">Overall speed score</p>
-                    </div>
-
-                    <div class="score-card" data-metric="accessibility">
-                        <div class="score-circle">
-                            <svg viewBox="0 0 120 120">
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" stroke-width="12"/>
-                                <circle class="score-ring" cx="60" cy="60" r="54" fill="none" stroke-width="12" 
-                                        stroke-dasharray="339.292" stroke-dashoffset="339.292"
-                                        transform="rotate(-90 60 60)"/>
-                            </svg>
-                            <div class="score-text">--</div>
-                        </div>
-                        <h3>Accessibility</h3>
-                        <p class="score-description">Usability for all users</p>
-                    </div>
-
-                    <div class="score-card" data-metric="seo">
-                        <div class="score-circle">
-                            <svg viewBox="0 0 120 120">
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" stroke-width="12"/>
-                                <circle class="score-ring" cx="60" cy="60" r="54" fill="none" stroke-width="12" 
-                                        stroke-dasharray="339.292" stroke-dashoffset="339.292"
-                                        transform="rotate(-90 60 60)"/>
-                            </svg>
-                            <div class="score-text">--</div>
-                        </div>
-                        <h3>SEO</h3>
-                        <p class="score-description">Search engine optimization</p>
-                    </div>
-
-                    <div class="score-card" data-metric="best-practices">
-                        <div class="score-circle">
-                            <svg viewBox="0 0 120 120">
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" stroke-width="12"/>
-                                <circle class="score-ring" cx="60" cy="60" r="54" fill="none" stroke-width="12" 
-                                        stroke-dasharray="339.292" stroke-dashoffset="339.292"
-                                        transform="rotate(-90 60 60)"/>
-                            </svg>
-                            <div class="score-text">--</div>
-                        </div>
-                        <h3>Best Practices</h3>
-                        <p class="score-description">Web standards</p>
-                    </div>
-                </div>
-
-                <div class="email-template">
-                    <h3>Email Report</h3>
-                    <button id="copyBtn" class="copy-btn">Copy to Clipboard</button>
-                    <pre id="emailContent"></pre>
-                </div>
-
-                <button id="newTestBtn" class="new-test-btn">Run New Test</button>
-            </div>
-        </main>
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo">🚀</span>
+      <span class="title">Client Report Builder</span>
     </div>
+    <div class="header-actions">
+      <button id="themeToggle" class="ghost">Toggle Theme</button>
+    </div>
+  </header>
 
-    <script src="script.js"></script>
+  <div class="app">
+    <aside class="sidebar">
+      <nav class="steps">
+        <button id="nav-1" class="step active" data-step="1">1. Setup</button>
+        <button id="nav-2" class="step" data-step="2" disabled>2. Run</button>
+        <button id="nav-3" class="step" data-step="3" disabled>3. Findings</button>
+        <button id="nav-4" class="step" data-step="4" disabled>4. Proposal</button>
+        <button id="nav-5" class="step" data-step="5" disabled>5. Email</button>
+      </nav>
+      <div class="sidebar-footer">
+        <small>Powered by Google PageSpeed Insights (Lighthouse)</small>
+      </div>
+    </aside>
+
+    <main class="content">
+      <!-- Step 1: Setup -->
+      <section id="s-1" class="step-page">
+        <h1>Setup</h1>
+        <p class="muted">Enter client info, choose device and categories. API key is optional.</p>
+
+        <form id="setupForm" class="card">
+          <div class="grid-2">
+            <div class="field">
+              <label for="clientName">Client first name</label>
+              <input id="clientName" type="text" placeholder="Alex" required />
+            </div>
+            <div class="field">
+              <label for="siteUrl">Website URL</label>
+              <input id="siteUrl" type="url" placeholder="https://example.com" required />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="strategy">Device</label>
+              <select id="strategy">
+                <option value="mobile" selected>Mobile</option>
+                <option value="desktop">Desktop</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Categories</label>
+              <div class="checks">
+                <label><input type="checkbox" name="category" value="performance" checked /> Performance</label>
+                <label><input type="checkbox" name="category" value="accessibility" checked /> Accessibility</label>
+                <label><input type="checkbox" name="category" value="best-practices" checked /> Best Practices</label>
+                <label><input type="checkbox" name="category" value="seo" checked /> SEO</label>
+              </div>
+            </div>
+          </div>
+
+          <details class="card subtle">
+            <summary>Advanced</summary>
+            <div class="grid-2 mt-8">
+              <div class="field">
+                <label for="apiKey">Google API Key (optional)</label>
+                <input id="apiKey" type="password" placeholder="Keep blank if not needed" />
+                <small>Restrict key by HTTP referrer in Google Cloud. Do not commit a real key in public repos.</small>
+              </div>
+              <div class="field">
+                <label><input id="rememberSettings" type="checkbox" /> Remember locally</label>
+                <small>Stores client name, URL, strategy, categories, and API key in this browser only.</small>
+              </div>
+            </div>
+          </details>
+
+          <div class="actions">
+            <button id="toRun" class="primary" type="submit">Next: Run Test →</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Step 2: Run -->
+      <section id="s-2" class="step-page hidden">
+        <h1>Run Lighthouse</h1>
+        <div class="card">
+          <p>URL: <strong id="runUrl"></strong> • Device: <strong id="runDevice"></strong></p>
+          <div class="actions">
+            <button id="runBtn" class="primary">Run Test</button>
+            <button id="openPSI" class="ghost" type="button">Open in PSI</button>
+            <a id="shareLink" class="ghost" href="#" target="_blank" rel="noopener">Shareable Link</a>
+          </div>
+          <div id="runStatus" class="run-status" aria-live="polite">
+            <div class="spinner" id="spinner" hidden></div>
+            <div id="statusText">Idle</div>
+          </div>
+          <div id="errorBox" class="error hidden"></div>
+        </div>
+        <div class="actions">
+          <button class="ghost" id="backToSetup">← Back</button>
+          <button class="primary" id="toFindings" disabled>Next: Findings →</button>
+        </div>
+      </section>
+
+      <!-- Step 3: Findings -->
+      <section id="s-3" class="step-page hidden">
+        <h1>Findings</h1>
+        <div class="grid-2">
+          <div class="card">
+            <h2>Category Scores</h2>
+            <div id="scoreCards" class="score-cards"></div>
+          </div>
+          <div class="card">
+            <h2>Key Metrics</h2>
+            <div id="metrics" class="metrics"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h2>Top Opportunities</h2>
+            <div id="opportunities"></div>
+          </div>
+          <div class="card">
+            <h2>Page Screenshot</h2>
+            <img id="finalScreenshot" alt="Final screenshot" class="screenshot" />
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Links</h2>
+          <ul class="links">
+            <li><a id="psiLink" href="#" target="_blank" rel="noopener">Open official PSI report</a></li>
+            <li><a id="jsonDownload" href="#" download="pagespeed.json">Download raw JSON</a></li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <button class="ghost" id="backToRun">← Back</button>
+          <button class="primary" id="toProposal">Next: Proposal →</button>
+        </div>
+      </section>
+
+      <!-- Step 4: Proposal -->
+      <section id="s-4" class="step-page hidden">
+        <h1>Proposal Builder</h1>
+        <div class="card">
+          <div id="proposalItems"></div>
+          <div class="proposal-actions">
+            <button id="addCustomItem" class="ghost">+ Add custom item</button>
+          </div>
+          <div class="totals">
+            <div><strong>One-time total: </strong><span id="totalOneTime">$0</span></div>
+            <div><strong>Monthly total: </strong><span id="totalMonthly">$0</span></div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="ghost" id="backToFindings">← Back</button>
+          <button class="primary" id="toEmail">Next: Email →</button>
+        </div>
+      </section>
+
+      <!-- Step 5: Email -->
+      <section id="s-5" class="step-page hidden">
+        <h1>Email Composer</h1>
+        <div class="card">
+          <textarea id="emailBody" rows="18" readonly></textarea>
+          <div class="actions">
+            <button id="copyEmail" class="primary">Copy Email</button>
+            <button id="openMail" class="ghost">Open Mail Client</button>
+          </div>
+          <div id="copyNotice" class="notice hidden">✓ Copied to clipboard</div>
+        </div>
+        <div class="actions">
+          <button class="ghost" id="restart">Start Over</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="app-footer">
+    <small>Results can vary due to network conditions. Lighthouse is run via Google PageSpeed Insights API.</small>
+  </footer>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
